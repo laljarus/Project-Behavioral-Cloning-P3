@@ -15,12 +15,12 @@ from keras.layers.convolutional import Convolution2D
 from keras.layers.pooling import MaxPooling2D
 from keras import optimizers
 import matplotlib.pyplot as plt
-import sklearn
+#import sklearn
 
   
 
-filename = ".\Test2\driving_log.csv"
-FolderPath = ".\\Test2\\IMG\\"
+filename = ".\Test\driving_log.csv"
+FolderPath = ".\\Test\\IMG\\"
 lines=[]
 with open(filename) as csvfile:
     reader = csv.reader(csvfile)
@@ -38,7 +38,7 @@ for line in lines:
     CurrentPath_center = FolderPath + filename_center
     Image_center = cv2.imread(CurrentPath_center)
     arrImages.append(Image_center)        
-    SteerAng_center = float(line[3])           
+    SteerAng_center = float(line[7])           
     arrSteerAng.append(SteerAng_center)
     
     # Center Flip Image        
@@ -68,7 +68,7 @@ X_train = np.array(arrImages)
 y_train = np.array(arrSteerAng)
     
 model = Sequential()
-model.add(Cropping2D(cropping=((60,25), (0,0)), input_shape=(160,320,3)))
+model.add(Cropping2D(cropping=((55,25), (0,0)), input_shape=(160,320,3)))
 model.add(Lambda(lambda x:x/255-0.5))
 model.add(Convolution2D(6,(5, 5),activation = 'relu'))
 model.add(MaxPooling2D((2, 2)))
@@ -83,10 +83,10 @@ model.add(Dropout(0.7))
 model.add(Dense(1))
 model.add(Activation('tanh'))
 
-sgd = optimizers.SGD(lr=0.01)
-model.compile(loss = "mse",optimizer = sgd,metrics=['accuracy'])
+#sgd = optimizers.SGD(lr=0.01)
+model.compile(loss = "mse",optimizer = 'adam',metrics=['accuracy'])
 history = model.fit(X_train,y_train,validation_split = 0.2,shuffle = True\
-                    ,epochs = 15,batch_size = 32)
+                    ,epochs = 4,batch_size = 32)
 					
 
 model.save('model.h5')
