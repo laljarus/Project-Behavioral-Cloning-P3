@@ -170,7 +170,7 @@ batch_size = 32
 adm = optimizers.adam(lr = 0.001)
 model.compile(loss = "mse",optimizer = adm)
 history = model.fit_generator(train_generator, len(train_samples)/batch_size, \
-                              epochs = 5, validation_data = test_generator, \
+                              epochs = 9, validation_data = test_generator, \
                               validation_steps= len(test_samples)/batch_size)
 
 
