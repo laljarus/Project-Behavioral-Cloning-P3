@@ -142,7 +142,7 @@ if network == 'nvidia':
     model.add(Activation('tanh'))
     model.add(Dense(10))
     model.add(Activation('tanh'))
-    model.add(Dropout(0.7))
+    model.add(Dropout(0.8))
     model.add(Dense(1))
     model.add(Activation('tanh'))
     
@@ -160,7 +160,7 @@ elif network == 'lenet':
     model.add(Activation('tanh'))
     model.add(Dense(84))
     model.add(Activation('tanh'))
-    model.add(Dropout(0.7))
+    model.add(Dropout(0.4))
     model.add(Dense(1))
     model.add(Activation('tanh'))
 
@@ -170,7 +170,7 @@ batch_size = 32
 adm = optimizers.adam(lr = 0.001)
 model.compile(loss = "mse",optimizer = adm)
 history = model.fit_generator(train_generator, len(train_samples)/batch_size, \
-                              epochs = 9, validation_data = test_generator, \
+                              epochs =  3 , validation_data = test_generator,\
                               validation_steps= len(test_samples)/batch_size)
 
 
