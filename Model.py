@@ -4,6 +4,7 @@ Created on Tue Dec  5 00:14:38 2017
 
 @author: laljarus
 """
+# Importing the reqired libraries
 
 import csv
 import cv2
@@ -18,6 +19,8 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
 import pandas as pd
+
+# Extracting the test and valiudation data from the simulator logs
 
 filename = "C:\\Users\\laljarus\\Documents\\GitHub\\Test2\\driving_log.csv"
 FolderPath = "C:\\Users\\laljarus\\Documents\\GitHub\\Test2\\IMG\\"
@@ -37,11 +40,14 @@ with open(filename) as csvfile:
         FileNamesRight.append(line[1].split("\\")[-1])       
         SteerAngRaw.append(float(line[3]))
 
+# Preprocessing of the steerubg angle value from the simulator
 # Running Average Filter
 # N is the filter order of mean average filter
+# The running average value is unused
 N = 5 
 window_array = np.ones(N)/N
 SteerAngFiltMean = np.convolve(SteerAngRaw,window_array,mode = 'same')
+
 
 '''
 arrImages = []
@@ -72,10 +78,14 @@ zip(FileNamesCenter,FileNamesLeft,FileNamesRight,SteerAngRaw):
 X_train = np.array(arrImages)
 y_train = np.array(arrSteerAng)
 '''
+# Storing the file names of images and steering angle in a dataframe 
+# which is processed by generator
 
 samples_dict = {'FileNameCenter':FileNamesCenter,'FileNameLeft':FileNamesLeft,\
                 'FileNameRight':FileNamesRight,'SteerAng':SteerAngRaw}
 samples_df = pd.DataFrame(samples_dict)
+
+# Generator fetches the test and training data to the neural network
 
 def Generator(samples,batch_size=32,correctionFactor = 0.2):
     #shuffle(samples)
@@ -93,20 +103,25 @@ def Generator(samples,batch_size=32,correctionFactor = 0.2):
                 FileNameRight = sample['FileNameRight']
                 SteerAng = sample['SteerAng']
                 
+                # Image from the center camera
+                
                 ImgCenter = cv2.imread(FolderPath+FileNameCenter)
                 ImgCenter = cv2.cvtColor(ImgCenter , cv2.COLOR_BGR2RGB)
                 arrImages.append(ImgCenter)
                 arrSteerAng.append(SteerAng)
     
+                # Flipped image from the center camera
                 ImgFlip = cv2.flip(ImgCenter,1)
                 arrImages.append(ImgFlip)
                 arrSteerAng.append(-1*SteerAng)
-    
+                
+                #Image from the left camera
                 ImgLeft = cv2.imread(FolderPath+FileNameLeft)
                 ImgLeft = cv2.cvtColor(ImgLeft , cv2.COLOR_BGR2RGB)
                 arrImages.append(ImgLeft)
                 arrSteerAng.append(SteerAng+correctionFactor)
-    
+                
+                # Image from the right camera
                 ImgRight = cv2.imread(FolderPath+FileNameRight)
                 ImgRight = cv2.cvtColor(ImgRight , cv2.COLOR_BGR2RGB)
                 arrImages.append(ImgRight)
@@ -116,15 +131,19 @@ def Generator(samples,batch_size=32,correctionFactor = 0.2):
             X_train = np.array(arrImages)
             y_train = np.array(arrSteerAng)
             yield shuffle(X_train, y_train)
-            
+
+# Spliting the test and training data 
 train_samples,test_samples = train_test_split(samples_df)
+# Generator to fetch the training data
 train_generator = Generator(train_samples)
+# Generator to fetch the test data
 test_generator = Generator(test_samples)
 
+# parameter to choose the network architecture
 network = 'lenet' 
 
 if network == 'nvidia':
-    
+   # Nvidia network architecture 
     model = Sequential()
     model.add(Cropping2D(cropping=((60,25), (0,0)), input_shape=(160,320,3)))
     model.add(Lambda(lambda x:x/255-0.5))
@@ -148,6 +167,7 @@ if network == 'nvidia':
     
 elif network == 'lenet':
     
+    # Lenet network architecture
     model = Sequential()
     model.add(Cropping2D(cropping=((55,25), (0,0)), input_shape=(160,320,3)))
     model.add(Lambda(lambda x:x/255-0.5))

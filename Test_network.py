@@ -100,7 +100,7 @@ model.add(Dense(128))
 model.add(Activation('tanh'))
 model.add(Dense(84))
 model.add(Activation('tanh'))
-model.add(Dropout(0.7))
+model.add(Dropout(0.4))
 model.add(Dense(1))
 model.add(Activation('tanh'))
 
@@ -108,7 +108,7 @@ model.add(Activation('tanh'))
 adm = optimizers.adam(lr = 0.001)
 model.compile(loss = "mse",optimizer = adm)
 history = model.fit(X_train,y_train,validation_split = 0.2,shuffle = True\
-                    ,epochs = 5,batch_size = 32)
+                    ,epochs = 4,batch_size = 32)
 					
 
 model.save('model.h5')
