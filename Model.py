@@ -161,7 +161,7 @@ if network == 'nvidia':
     model.add(Activation('tanh'))
     model.add(Dense(10))
     model.add(Activation('tanh'))
-    model.add(Dropout(0.8))
+    model.add(Dropout(0.4))
     model.add(Dense(1))
     model.add(Activation('tanh'))
     

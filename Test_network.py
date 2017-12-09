@@ -98,9 +98,10 @@ model.add(MaxPooling2D((2, 2)))
 model.add(Flatten())
 model.add(Dense(128))
 model.add(Activation('tanh'))
+model.add(Dropout(0.3))
 model.add(Dense(84))
 model.add(Activation('tanh'))
-model.add(Dropout(0.4))
+model.add(Dropout(0.3))
 model.add(Dense(1))
 model.add(Activation('tanh'))
 
@@ -108,10 +109,10 @@ model.add(Activation('tanh'))
 adm = optimizers.adam(lr = 0.001)
 model.compile(loss = "mse",optimizer = adm)
 history = model.fit(X_train,y_train,validation_split = 0.2,shuffle = True\
-                    ,epochs = 4,batch_size = 32)
+                    ,epochs = 3,batch_size = 32)
 					
 
-model.save('model.h5')
+model.save('model_test.h5')
     
 plt.plot(history.history['loss'])
 plt.plot(history.history['val_loss'])
