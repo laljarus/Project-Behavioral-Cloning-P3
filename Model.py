@@ -183,23 +183,25 @@ elif network == 'lenet':
     model.add(Dropout(0.4))
     model.add(Dense(1))
     model.add(Activation('tanh'))
+    
 
 batch_size = 32
 
 #sgd = optimizers.SGD(lr=0.01)
-adm = optimizers.adam(lr = 0.001)
-model.compile(loss = "mse",optimizer = adm)
+#adm = optimizers.adam(lr = 0.001)
+model.compile(loss = "mse",optimizer = 'adam')
 history = model.fit_generator(train_generator, len(train_samples)/batch_size, \
                               epochs =  3 , validation_data = test_generator,\
                               validation_steps= len(test_samples)/batch_size)
 
 
-model.save('model.h5')
+model.save('model_test.h5')
     
 plt.plot(history.history['loss'])
 plt.plot(history.history['val_loss'])
-plt.title('model mean squared error loss')
-plt.ylabel('mean squared error loss')
-plt.xlabel('epoch')
-plt.legend(['training set', 'validation set'], loc='upper right')
+#plt.title('mean squared error loss')
+plt.ylabel('Mean Squared Error Loss')
+plt.xlabel('Epoch')
+plt.legend(['Training set', 'Validation set'], loc='upper right')
+plt.grid(True)
 plt.show()

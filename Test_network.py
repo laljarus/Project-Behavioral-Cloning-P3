@@ -62,8 +62,7 @@ SteerAngFiltButter = SteerAngFiltButter.tolist()
 arrImages = []
 arrSteerAng = []
 
-for FileNameCenter,FileNameRight,FileNameLeft,SteerAng in \
-zip(FileNamesCenter,FileNamesLeft,FileNamesRight,SteerAngRaw):
+for FileNameCenter,FileNameRight,FileNameLeft,SteerAng in zip(FileNamesCenter,FileNamesLeft,FileNamesRight,SteerAngRaw):
     
     ImgCenter = cv2.imread(FolderPath+FileNameCenter)
     ImgCenter = cv2.cvtColor(ImgCenter , cv2.COLOR_BGR2RGB)
