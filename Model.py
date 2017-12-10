@@ -195,7 +195,7 @@ history = model.fit_generator(train_generator, len(train_samples)/batch_size, \
                               validation_steps= len(test_samples)/batch_size)
 
 
-model.save('model_test.h5')
+model.save('model.h5')
     
 plt.plot(history.history['loss'])
 plt.plot(history.history['val_loss'])
